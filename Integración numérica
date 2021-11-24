@@ -1,0 +1,51 @@
+import math as mt
+
+def lagrange_basis(x, idx, x_at):
+  res= 1
+  for i,j in enumerate(x):
+    if idx != i:
+      res= res* (x_at - j)/(x[idx] - j)
+  return res
+
+def lagrange(x, y, x_at):
+  px = 0
+  for i,j in enumerate(y):
+    px += j*lagrange_basis(x, i, x_at)
+  return px
+	
+def coef(u,v,f=lagrange):
+  c=lagrange(u,v,0)
+  a=0.5*(lagrange(u,v,1)+ lagrange(u,v,(-1)))-c
+  b=lagrange(u,v,1)-a-c
+  return a,b,c
+
+def particion(a,b):
+  P=[]
+  if a<b:
+   for i in range(a,b):
+    P.append([i,i+.25,i+.5])
+    P.append([i+.5,i+.75,i+1])
+  else:
+    for i in range(b,a):
+      P.append([i,i+.25,i+.5])
+      P.append([i+.5,i+.75,i+1])
+  return P
+
+def evaluar_integral(a,b, f):
+  x=[]
+  k=0
+  P=particion(a,b)
+  for i in P:
+    x=i
+    maxm=max(x)
+    minm=min(x)
+    y=[f(i) for i in x]
+    A,B,C=coef(x,y)
+    k  +=  (A * ( (maxm**3 - minm**3)/3 )) +  (B*( (maxm**2 - minm**2)/2 )) + C*(maxm-minm)
+  return k,P
+
+def normal_den(x):
+  return (1/mt.sqrt(2*mt.pi))*(mt.exp(-.5*(x**2)))
+
+value,points=evaluar_integral(-1,2, normal_den)
+print("El resultado de la integración dentro de su respectivo intervalo es:", value)
