@@ -1,0 +1,34 @@
+import math as mt
+import numpy as np
+
+def normal_den(x):
+	return (1/mt.sqrt(2*mt.pi))*mt.exp(-0.5*mt.pow(x, 2))
+
+
+def lagrange_basis(x, idx, x_at):
+	res = 1
+	res = np.prod(res*[(x_at-j)/(x[idx]-j) for i,j in enumerate(x) if idx != i])
+	
+	return res
+
+def lagrange(x, y, x_at):
+	px = 0
+	px = np.sum([j*lagrange_basis(x, i, x_at) for i,j in enumerate(y)])
+	
+	return px
+
+def integración_lagrange (funcion,a,b,n):
+    h=abs((b-a)/n)
+    grid = [b+h*i for i in range(n+1)]
+    med=[i+h/2 for i in grid]
+    A=0
+    for i in range (len(grid)-1):
+        x=[grid[i],med[i],grid[i+1]]
+        y=[funcion(grid[i]), funcion(med[i]),funcion(grid[i+1])]
+        temp=[grid[i]+j*(h/10) for j in range (10)]
+        y2=[lagrange(x,y,s) for s in temp]
+        A+=sum(y2)*(h/10)
+    return A
+
+
+print(integración_lagrange(normal_den, 1, -4,5000)) 
