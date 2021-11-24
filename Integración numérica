@@ -1,5 +1,7 @@
 import math as mt
 
+#Tomamos como base las funciones analizadas en clase
+
 def lagrange_basis(x, idx, x_at):
   res= 1
   for i,j in enumerate(x):
@@ -12,6 +14,8 @@ def lagrange(x, y, x_at):
   for i,j in enumerate(y):
     px += j*lagrange_basis(x, i, x_at)
   return px
+  
+#Los valores de los coeficientes se obtienen al evaluar el polinomio característico en valores que permitan despejar cada coeficiente en términos de los mismos  
 	
 def coef(u,v,f=lagrange):
   c=lagrange(u,v,0)
@@ -30,6 +34,8 @@ def particion(a,b):
       P.append([i,i+.25,i+.5])
       P.append([i+.5,i+.75,i+1])
   return P
+
+#Utilizando la fórmula de integración conocida para polinomios de segundo orden, se tiene lo siguiente:
 
 def evaluar_integral(a,b, f):
   x=[]
